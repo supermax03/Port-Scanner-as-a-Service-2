@@ -1,6 +1,5 @@
 from dao.dataaccesslayer import *
 from dao.entities import *
-from json import dumps,JSONEncoder
 import datetime
 
 def getstatus(hash):
