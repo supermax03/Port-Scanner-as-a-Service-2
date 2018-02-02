@@ -1,5 +1,4 @@
 from dao.dataaccesslayer import *
-from dao.entities import *
 from myutils.utils import isexpiredtoken, gethash
 from processor import sender
 import sys
