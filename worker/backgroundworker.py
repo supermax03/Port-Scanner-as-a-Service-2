@@ -4,23 +4,22 @@ import time
 
 
 class BackgroundWorker:
-    _activated=True
+    _activated = True
+
     @classmethod
     def listening(cls):
         while BackgroundWorker._activated:
-
             results = BackgroundWorker.get_req()
             for item in results:
                 handler = Services.gethandler(item.handler)
                 results = handler.process(item.requeriment)
                 if (results):
-                      BackgroundWorker.update(item.hash,results)
+                    BackgroundWorker.update(item.hash, results)
             time.sleep(3)
 
-
     @classmethod
-    def update(cls,hash,results):
-          updateoperation(hash,results)
+    def update(cls, hash, results):
+        updateoperation(hash, results)
 
     @classmethod
     def get_req(cls):
@@ -29,11 +28,11 @@ class BackgroundWorker:
 
 def stop():
     print("Frenando....")
-    BackgroundWorker._activated=False
+    BackgroundWorker._activated = False
+
 
 def start():
     BackgroundWorker.listening()
 
 
 start()
-
