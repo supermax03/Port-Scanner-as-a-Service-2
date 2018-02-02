@@ -2,6 +2,7 @@ import time
 import random
 import string
 import hashlib
+import datetime
 
 
 def makesalt():
@@ -15,3 +16,10 @@ def gethash():
     h = hashlib.md5()
     h.update((time.clock().__str__() + makesalt()).encode('utf-8'))
     return h.hexdigest()
+
+def isexpiredtoken(updated_on):
+    time = (datetime.datetime.now() - updated_on).total_seconds()
+    result=False
+    if (time>3600):
+             result=True
+    return result
