@@ -50,5 +50,7 @@ def addOperation(op):
 
     except:
         print(sys.exc_info())
+        results = {"state": "Internal server Error",
+                   "exception": str(sys.exc_info()[1]), "code": 500}
     finally:
         return results
