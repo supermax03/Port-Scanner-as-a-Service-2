@@ -29,8 +29,14 @@ def getstatus(hash):
 
 
 def validateop(op):
-    task = dal.Session.query(Task).filter(Task.name == op['operation'])
+    task = dal.Session.query(Task).filter(Task.name == op['operation']).first()
     return (task != None)
+
+
+def gettaskid(op):
+    task = dal.Session.query(Task).filter(Task.name == op[0]['operation']).first()
+    print(task)
+    return task.taskid
 
 
 def addOperation(op):
@@ -39,13 +45,19 @@ def addOperation(op):
         if (validateop(op)):
             op = [op]
             op[0]['idreq'] = gethash()
+            op[0]['taskid'] = gettaskid(op)
             msg = json.dumps(op)
+            print(msg)
             sender.send(msg)
             results = {"state": 'Operacion Valida',
                        "code": 200,
                        "yourid": op[0]['idreq'],
                        "payload": op[0]['payload'],
                        "operation": op[0]['operation']}
+        else:
+            results = {"state": 'Operacion Invalida',
+                       "code": 404
+                       }
 
     except:
         print(sys.exc_info())
