@@ -10,7 +10,7 @@ from json import loads
 def post(request):
     results=executor.addOperation(loads(request.body,
                                       encoding=request.charset))
-    return results #{"Link": {"operation": "Port Scan", "yourid": "/results/" + str(results["idreq"])}}
+    return results
 
 @view_config(route_name='info', renderer='json',
              request_method='GET')
