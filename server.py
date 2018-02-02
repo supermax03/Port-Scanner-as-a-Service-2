@@ -2,13 +2,15 @@ from wsgiref.simple_server import make_server
 from pyramid.view import view_config
 from pyramid.config import Configurator
 from pyramid.response import Response
-from processor import sender
+from processor import executor
+from json import loads
 
 @view_config(route_name='process', renderer='json',
              request_method='POST')
 def post(request):
-    idreq=sender.send()
-    return {'Link': {'operation': "Port Scan", 'yourid': "/results/" + str(idreq)}}
+    results=executor.addOperation(loads(request.body,
+                                      encoding=request.charset))
+    return results #{"Link": {"operation": "Port Scan", "yourid": "/results/" + str(results["idreq"])}}
 
 @view_config(route_name='info', renderer='json',
              request_method='GET')
@@ -19,8 +21,9 @@ def get(request):
 @view_config(route_name='results', renderer='json',
              request_method='GET')
 def results(request):
-    return Response('%(idreq)s status not available!' % request.matchdict)
-
+    result=executor.getstatus(request.matchdict['idreq'])
+    request.response.status=result['code']
+    return result
 
 def start_server():
     config = Configurator()
