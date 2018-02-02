@@ -8,7 +8,7 @@ import json
 
 def getstatus(hash):
     try:
-        op = dal.Session.query(Operation).filter(Operation.hash == hash).first()
+        op = getoperation(hash)
         if (op):
             if not isexpiredtoken(op.updated_on):
                 results = {"state": op.state,
@@ -26,17 +26,6 @@ def getstatus(hash):
                    "exception": str(sys.exc_info()[1]), "code": 500}
     finally:
         return results
-
-
-def validateop(op):
-    task = dal.Session.query(Task).filter(Task.name == op['operation']).first()
-    return (task != None)
-
-
-def gettaskid(op):
-    task = dal.Session.query(Task).filter(Task.name == op[0]['operation']).first()
-    print(task)
-    return task.taskid
 
 
 def addOperation(op):
