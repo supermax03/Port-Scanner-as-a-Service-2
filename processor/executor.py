@@ -4,6 +4,16 @@ from processor import sender
 import sys
 import json
 
+def getservices(service):
+    results=[]
+    for item in getservices_def(service):
+        results.append(item)
+    if len(results)>0:
+           results.append({'code':200})
+    else:
+           results.append({'code':404})
+    print(results)
+    return results
 
 def getstatus(hash):
     try:
