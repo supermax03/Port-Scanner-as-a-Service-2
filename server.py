@@ -9,7 +9,8 @@ from json import loads
              request_method='POST')
 def post(request):
     results=executor.addOperation(loads(request.body,
-                                      encoding=request.charset))
+                                       encoding=request.charset))
+    request.response.status = results['code']
     return results
 
 @view_config(route_name='info', renderer='json',
