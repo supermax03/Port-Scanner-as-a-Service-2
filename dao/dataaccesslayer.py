@@ -1,7 +1,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from dao.instance.config import app_config
-from dao.entities import Base
+from dao.entities import *
 
 
 class DataAccessLayer:
@@ -17,3 +17,19 @@ class DataAccessLayer:
 
 
 dal = DataAccessLayer()
+
+
+def validateop(op):
+    task = dal.Session.query(Task).filter(Task.name == op['operation']).first()
+    return (task != None)
+
+
+def gettaskid(op):
+    task = dal.Session.query(Task).filter(Task.name == op[0]['operation']).first()
+    print(task)
+    return task.taskid
+
+
+def getoperation(hash):
+    op = dal.Session.query(Operation).filter(Operation.hash == hash).first()
+    return op
