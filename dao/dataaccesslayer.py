@@ -6,7 +6,7 @@ from dao.entities import *
 
 class DataAccessLayer:
     def __init__(self):
-        self.engine = create_engine(app_config['development'].SQLALCHEMY_DATABASE_URI)
+        self.engine = create_engine(app_config['development'].SQLALCHEMY_DATABASE_URI,pool_size=20)
         self._session = sessionmaker(bind=self.engine)()
         Base.metadata.create_all(self.engine)  # Sino existe se crea toda la base de datos
 
@@ -65,3 +65,12 @@ def addoperation(data):
                    dal.Session.commit()
     except:
             dal.Session.rollback()
+
+def getservices_def(service):
+     results=[ dal.Session.query(Services).all,
+                dal.Session.query(Services).\
+                            filter(Services.name==service)\
+                            .first
+              ][service!=None]()
+     results=dal.Session.query(Services).all()
+     return results

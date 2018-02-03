@@ -16,20 +16,29 @@ def post(request):
 @view_config(route_name='info', renderer='json',
              request_method='GET')
 def get(request):
+    results=executor.getservices(request.matchdict['service'])
+    print(results)
+    print("Hola")
+    print(request.matchdict)
     return Response('Hello %(service)s!' % request.matchdict)
 
 
 @view_config(route_name='results', renderer='json',
              request_method='GET')
 def results(request):
+
     result=executor.getstatus(request.matchdict['idreq'])
     request.response.status=result['code']
     return result
 
+def pregenservices(request, elements, kw):
+    kw.setdefault('service', '')
+    return elements, kw
+
 def start_server():
     config = Configurator()
     config.add_route('process', '/service')
-    config.add_route('info', '/info/{service}')
+    config.add_route('info', '/info/{service:.*}',pregenerator=pregenservices)
     config.add_route('results', '/results/{idreq}')
     config.scan()
     app = config.make_wsgi_app()
