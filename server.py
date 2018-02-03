@@ -16,8 +16,9 @@ def post(request):
 @view_config(route_name='info', renderer='json',
              request_method='GET')
 def get(request):
-    results=executor.getservices(request.matchdict['service'])
-    return results
+    result=executor.getservices(request.matchdict['service'])
+    request.response.status=result['code']
+    return result
 
 @view_config(route_name='results', renderer='json',
              request_method='GET')
@@ -28,6 +29,7 @@ def results(request):
 
 def pregenservices(request, elements, kw):
     kw.setdefault('service', '')
+    print(kw)
     return elements, kw
 
 def start_server():
