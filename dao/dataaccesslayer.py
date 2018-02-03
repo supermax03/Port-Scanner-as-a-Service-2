@@ -70,7 +70,6 @@ def getservices_def(service):
      results=[ dal.Session.query(Services).all,
                 dal.Session.query(Services).\
                             filter(Services.name==service)\
-                            .first
+                            .all
               ][service!=None]()
-     results=dal.Session.query(Services).all()
      return results
