@@ -17,16 +17,11 @@ def post(request):
              request_method='GET')
 def get(request):
     results=executor.getservices(request.matchdict['service'])
-    print(results)
-    print("Hola")
-    print(request.matchdict)
-    return Response('Hello %(service)s!' % request.matchdict)
-
+    return results
 
 @view_config(route_name='results', renderer='json',
              request_method='GET')
 def results(request):
-
     result=executor.getstatus(request.matchdict['idreq'])
     request.response.status=result['code']
     return result
