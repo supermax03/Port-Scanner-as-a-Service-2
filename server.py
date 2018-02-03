@@ -29,7 +29,6 @@ def results(request):
 
 def pregenservices(request, elements, kw):
     kw.setdefault('service', '')
-    print(kw)
     return elements, kw
 
 def start_server():
