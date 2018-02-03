@@ -6,9 +6,9 @@ from dao.entities import *
 
 class DataAccessLayer:
     def __init__(self):
-        self.engine = create_engine(app_config['development'].SQLALCHEMY_DATABASE_URI,pool_size=20)
+        self.engine = create_engine(app_config['development'].SQLALCHEMY_DATABASE_URI,pool_size=50)
         self._session = sessionmaker(bind=self.engine)()
-        Base.metadata.create_all(self.engine)  # Sino existe se crea toda la base de datos
+        Base.metadata.create_all(self.engine)
 
     def session(self):
         return self._session
@@ -53,6 +53,14 @@ def updateoperation(hash,results):
   except:
       dal.Session.rollback()
 
+def addport(ports):
+    try:
+         for port,name in ports.items():
+                      service=Services(name=name,port=port)
+                      dal.Session.add(service)
+         dal.Session.commit()
+    except:
+        dal.Session.rollback()
 
 def addoperation(data):
     try:
@@ -67,9 +75,11 @@ def addoperation(data):
             dal.Session.rollback()
 
 def getservices_def(service):
-     results=[ dal.Session.query(Services).all,
-                dal.Session.query(Services).\
+     if (service):
+            results=dal.Session.query(Services).\
                             filter(Services.name==service)\
-                            .all
-              ][service!=None]()
+                            .all()
+     else:
+            results=dal.Session.query(Services).all()
+
      return results
