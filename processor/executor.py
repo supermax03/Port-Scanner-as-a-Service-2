@@ -4,16 +4,21 @@ from processor import sender
 import sys
 import json
 
+
 def getservices(service):
-    results=[]
-    for item in getservices_def(service):
-        results.append(item)
-    if len(results)>0:
-           results.append({'code':200})
+    items = []
+    print(service)
+    for svc in getservices_def(service):
+        item = {'name': svc.name,
+                'port': svc.port}
+        items.append(item)
+    if len(items) > 0:
+        code=200
     else:
-           results.append({'code':404})
-    print(results)
+        code=404
+    results={'results':items,'code':code}
     return results
+
 
 def getstatus(hash):
     try:
@@ -58,7 +63,6 @@ def addOperation(op):
                        }
 
     except:
-        print(sys.exc_info())
         results = {"state": "Internal server Error",
                    "exception": str(sys.exc_info()[1]), "code": 500}
     finally:
