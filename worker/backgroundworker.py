@@ -32,7 +32,8 @@ def stop():
 
 
 def start():
+    BackgroundWorker._activated=True
     BackgroundWorker.listening()
 
-
+stop()
 start()

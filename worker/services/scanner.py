@@ -1,6 +1,13 @@
 import threading
+from dao.dataaccesslayer import addport
 
-
+class Port:
+      def __init__(self):
+           self.results={}
+      def worker(self,services):
+          for name,port in services.items():
+              self.results[port]=addport(name,port)
+          return self.results
 class Scanner:
     _most_used_ports = {
         '21': 'FTP',
@@ -36,9 +43,11 @@ class Scanner:
     def __init__(self):
         self.results = {}
 
+
     @classmethod
     def most_used_ports(cls):
         return Scanner._most_used_ports.keys()
+
 
     @classmethod
     def getallservices(cls):
@@ -71,6 +80,7 @@ class Scanner:
         for port in ports:
             self.results[host][port] = ["closed","open"][self.getportstatus(host, port)]
 
+
 class ScanService:
    @classmethod
    def process(cls,hosts):
@@ -86,3 +96,14 @@ class ScanService:
         [t.join() for t in _threads]
       finally:
                return sc.results
+
+class PortService:
+      @classmethod
+      def process(cls,*args):
+          p=Port()
+          p.worker(*args)
+          return p.results
+
+
+
+
