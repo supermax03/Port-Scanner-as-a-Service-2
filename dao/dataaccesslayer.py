@@ -2,6 +2,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from dao.instance.config import app_config
 from dao.entities import *
+import sys
 
 
 class DataAccessLayer:
@@ -53,14 +54,21 @@ def updateoperation(hash,results):
   except:
       dal.Session.rollback()
 
-def addport(ports):
+
+def addport(name,port):
     try:
-         for port,name in ports.items():
-                      service=Services(name=name,port=port)
-                      dal.Session.add(service)
-         dal.Session.commit()
+         status='OK'
+         if not getport_def(port):
+                service=Services(port=port,name=name)
+                dal.Session.add(service)
+                dal.Session.commit()
+         else:
+                status='DUP'
     except:
-        dal.Session.rollback()
+                dal.Session.rollback()
+                status=sys.exc_info()[0]
+    finally:
+                return status
 
 def addoperation(data):
     try:
@@ -83,3 +91,10 @@ def getservices_def(service):
             results=dal.Session.query(Services).all()
 
      return results
+
+def getport_def(port):
+       if (port):
+            results=dal.Session.query(Services).filter(Services.port==port).all()
+       else:
+            results=dal.Session.query(Services).all()
+       return results
