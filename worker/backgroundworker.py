@@ -1,4 +1,4 @@
-from dao.dataaccesslayer import *
+from dao.dataaccesslayer import updateoperation,getrequeriments
 from worker.services.Services import Services
 import time
 
