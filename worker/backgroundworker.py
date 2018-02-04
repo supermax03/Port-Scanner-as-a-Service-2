@@ -5,7 +5,9 @@ import time
 
 class BackgroundWorker:
     _activated = True
-
+    @classmethod
+    def on(cls,flag=True):
+        BackgroundWorker._activated = flag
     @classmethod
     def listening(cls):
         while BackgroundWorker._activated:
@@ -28,11 +30,11 @@ class BackgroundWorker:
 
 def stop():
     print("Frenando....")
-    BackgroundWorker._activated = False
+    BackgroundWorker.on(False)
 
 
 def start():
-    BackgroundWorker._activated=True
+    BackgroundWorker.on()
     BackgroundWorker.listening()
 
 stop()
